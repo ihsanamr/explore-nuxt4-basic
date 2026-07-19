@@ -41,7 +41,27 @@ const progress = useCourseProgress();
       </aside>
 
       <main class="grow">
-        <NuxtPage />
+        <NuxtErrorBoundary>
+          <NuxtPage />
+
+          <template #error="{ error, clearError }">
+            <div
+              class="bg-red-50 p-6 rounded-lg border border-red-200 text-center"
+            >
+              <h3 class="text-xl font-bold text-red-600 mb-2">
+                Ups! Komponen ini bermasalah
+              </h3>
+              <p class="text-gray-700 mb-4">{{ error.value.message }}</p>
+
+              <button
+                @click="clearError"
+                class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Coba muat ulang area ini
+              </button>
+            </div>
+          </template>
+        </NuxtErrorBoundary>
       </main>
     </div>
   </div>

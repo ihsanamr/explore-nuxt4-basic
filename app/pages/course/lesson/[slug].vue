@@ -1,7 +1,29 @@
 <script setup>
 const route = useRoute();
-
 const progress = useCourseProgress();
+const course = useCourse();
+
+definePageMeta({
+  validate: (route) => {
+    const slugParams = route.params.slug;
+
+    const course = useCourse();
+
+    const chapter = course.chapters.find((chapter) => {
+      return chapter.lessons.some((lesson) => lesson.slug === slugParams);
+    });
+
+    if (chapter) {
+      return true;
+    } else {
+      throw createError({
+        status: 404,
+        message: `Pelajaran dengan topik "${slugParams}" tidak ditemukan.`,
+        fatal: true,
+      });
+    }
+  },
+});
 
 const lessonIsCompleted = computed(() => {
   return progress.value.includes(route.params.slug);

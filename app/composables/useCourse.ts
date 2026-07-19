@@ -1,4 +1,23 @@
-export const useCourse = () => {
+export type Lesson = {
+  title: string;
+  slug: string;
+  number: number;
+  text: string;
+};
+
+export type Chapter = {
+  title: string;
+  slug: string;
+  number: number;
+  lessons: Lesson[];
+};
+
+export type Course = {
+  title: string;
+  chapters: Chapter[];
+};
+
+export const useCourse = (): Course => {
   // Kita mengembalikan sebuah object berisi data kursus
   return {
     title: "Mastering Full-Stack Basics",
