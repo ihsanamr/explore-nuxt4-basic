@@ -5,7 +5,10 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   css: ["./app/assets/css/main.css"],
-  modules: ["@vueuse/nuxt"],
+  modules: ["@vueuse/nuxt", "@nuxtjs/supabase"],
+  supabase: {
+    redirect: false,
+  },
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,9 +1,50 @@
-<script setup>
+<script setup lang="ts">
 const course = useCourse();
 const progress = useCourseProgress();
+
+definePageMeta({
+  middleware: ["auth"],
+});
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+const logout = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Gagal logout:", error.message);
+    return;
+  }
+
+  await navigateTo("/login");
+};
 </script>
 
 <template>
+  <div
+    class="bg-white shadow-sm p-4 mb-1 max-w-5xl mx-auto flex justify-between items-center rounded-lg"
+  >
+    <div class="flex items-center gap-3">
+      <img
+        v-if="user?.user_metadata?.avatar_url"
+        :src="user.user_metadata.avatar_url"
+        alt="Avatar"
+        class="w-10 h-10 rounded-full border border-gray-200"
+      />
+      <span class="font-bold text-gray-800">
+        Halo, {{ user?.user_metadata?.full_name || "Pengguna" }}!
+      </span>
+    </div>
+
+    <button
+      @click="logout"
+      class="bg-red-100 text-red-600 hover:bg-red-200 font-semibold py-2 px-4 rounded transition-colors duration-200 cursor-pointer"
+    >
+      Keluar
+    </button>
+  </div>
+
   <div class="max-w-5xl mx-auto p-8">
     <header class="mb-6">
       <h2 class="text-2xl font-bold">{{ course.title }}</h2>
@@ -51,7 +92,7 @@ const progress = useCourseProgress();
               <h3 class="text-xl font-bold text-red-600 mb-2">
                 Ups! Komponen ini bermasalah
               </h3>
-              <p class="text-gray-700 mb-4">{{ error.value.message }}</p>
+              <p class="text-gray-700 mb-4">{{ error.message }}</p>
 
               <button
                 @click="clearError"
